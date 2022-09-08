@@ -24,6 +24,7 @@ html *::-webkit-scrollbar {
   width: 8px;
 }
 
+
 html *::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.15);
@@ -68,4 +69,9 @@ a {
 
 .avatar {
   border-radius: 50%;
+}
+
+.music-img {
+  border-radius: 2px;
+  cursor: pointer;
 }

@@ -3,10 +3,24 @@ import Image from 'next/image';
 import * as React from 'react';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Tippy from '@tippyjs/react/headless';
-import PopperWrapper from '../Popper/Wrapper';
-export interface AccountItemProps {}
+import { Account } from '@/models/Account';
+export interface AccountItemProps {
+    data: Account;
+}
 
-export default function AccountItem(props: AccountItemProps) {
+export default function AccountItem({ data }: AccountItemProps) {
+    const fullName = `${data.first_name} ${data.last_name}`;
+
+    let handleCount = (number: number): string => {
+        if (number / 1000000 >= 1) {
+            return (number / 1000000).toFixed(1) + 'M';
+        }
+        if (number / 1000 >= 1) {
+            return (number / 1000).toFixed(1) + 'K';
+        }
+        return number.toString();
+    };
+
     return (
         <Box>
             <Tippy
@@ -33,7 +47,7 @@ export default function AccountItem(props: AccountItemProps) {
                             sx={{ cursor: 'pointer' }}
                         >
                             <Image
-                                src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-aiso/65d3c6b1d1e205c75536ccf1f26d552d~c5_100x100.jpeg?x-expires=1662372000&x-signature=Ea3ptkEAJZ7nVqrRuYTTysT%2FmbU%3D"
+                                src={data.avatar}
                                 alt="avatar"
                                 width="44px"
                                 height="44px"
@@ -46,7 +60,7 @@ export default function AccountItem(props: AccountItemProps) {
                                     backgroundColor: 'primary.main',
                                     color: 'white',
                                     fontSize: '16px',
-                                    fontWeight: 'bold',
+                                    fontWeight: '600',
                                     minWidth: '106px',
                                     height: '36px',
                                     textTransform: 'none',
@@ -70,12 +84,14 @@ export default function AccountItem(props: AccountItemProps) {
                                 fontSize="18px"
                                 lineHeight="22px"
                             >
-                                QuocNguyenPhu
+                                {data.nickname}
                             </Typography>
-                            <CheckCircleIcon
-                                fontSize="small"
-                                sx={{ ml: '6px', color: 'rgb(32, 213, 236)', width: '17px' }}
-                            />
+                            {data.tick && (
+                                <CheckCircleIcon
+                                    fontSize="small"
+                                    sx={{ ml: '6px', color: 'rgb(32, 213, 236)', width: '17px' }}
+                                />
+                            )}
                         </Stack>
                         <Typography
                             fontSize="14px"
@@ -84,15 +100,15 @@ export default function AccountItem(props: AccountItemProps) {
                             lineHeight="20px"
                             sx={{ cursor: 'pointer' }}
                         >
-                            theanh28entertainment
+                            {fullName}
                         </Typography>
 
                         <Stack direction="row" pt="10px" spacing="6px" fontSize="17px">
-                            <Typography fontWeight="bold">9.3M</Typography>
+                            <Typography fontWeight="bold"> {handleCount(data.followers_count)} </Typography>
                             <Typography color="#161823bf" paddingRight="6px">
                                 Follower
                             </Typography>
-                            <Typography fontWeight="bold">151.6M</Typography>
+                            <Typography fontWeight="bold"> {handleCount(data.likes_count)} </Typography>
                             <Typography color="#161823bf">Likes</Typography>
                         </Stack>
                     </Box>
@@ -112,7 +128,7 @@ export default function AccountItem(props: AccountItemProps) {
                 >
                     <Box width="32px" height="32px">
                         <Image
-                            src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-aiso/65d3c6b1d1e205c75536ccf1f26d552d~c5_100x100.jpeg?x-expires=1662372000&x-signature=Ea3ptkEAJZ7nVqrRuYTTysT%2FmbU%3D"
+                            src={data.avatar}
                             alt="avatar"
                             width="32px"
                             height="32px"
@@ -123,15 +139,17 @@ export default function AccountItem(props: AccountItemProps) {
                     <Box flex="1" ml="12px">
                         <Stack direction="row" alignItems="center">
                             <Typography component="h4" variant="body1" fontWeight="bold" color="#161823" lineHeight="1">
-                                QuocNguyenPhu
+                                {data.nickname}
                             </Typography>
-                            <CheckCircleIcon
-                                fontSize="small"
-                                sx={{ ml: '6px', color: 'rgb(32, 213, 236)', width: '17px' }}
-                            />
+                            {data.tick && (
+                                <CheckCircleIcon
+                                    fontSize="small"
+                                    sx={{ ml: '6px', color: 'rgb(32, 213, 236)', width: '17px' }}
+                                />
+                            )}
                         </Stack>
                         <Typography variant="body2" fontSize="12px" color="#161823bf">
-                            Nguyễn Phú Quốc
+                            {fullName}
                         </Typography>
                     </Box>
                 </Stack>

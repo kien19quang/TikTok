@@ -59,10 +59,10 @@ let theme = createTheme({
             },
             styleOverrides: {
                 root: {
-                    color: 'black',
+                    color: '#161823',
 
-                    '&:hover, &.active': {
-                        color: '#fe2c55',
+                    '&:hover': {
+                        textDecoration: 'underline',
                     },
                 },
             },
@@ -78,6 +78,13 @@ let theme = createTheme({
                     props: { variant: 'contained', color: 'primary' },
                     style: {
                         color: 'white',
+                        textTransform: 'none',
+                        boxShadow: 'none',
+
+                        '&:hover': {
+                            background: 'linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)),#FE2C55',
+                            boxShadow: 'none',
+                        },
                     },
                 },
                 {

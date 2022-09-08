@@ -9,11 +9,13 @@ export function MainLayout({ children }: LayoutProps) {
             <Header />
 
             <Container>
-                <Stack direction="row" mt="60px">
+                <Stack direction="row" mt="60px" justifyContent="space-between">
                     <Box width="30%">
                         <Sidebar />
                     </Box>
-                    <Box width="65%">{children}</Box>
+                    <Box width="65%" py="24px">
+                        {children}
+                    </Box>
                 </Stack>
             </Container>
         </Box>
