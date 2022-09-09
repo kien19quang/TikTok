@@ -1,23 +1,32 @@
 import { MoreIcon, ShareOutLineIcon } from '@/components/Icons';
+import { User } from '@/models';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import * as React from 'react';
 
-export interface HeaderProfileProps {}
+export interface HeaderProfileProps {
+    dataProfile: User;
+}
 
-export default function HeaderProfile(props: HeaderProfileProps) {
+export default function HeaderProfile({ dataProfile }: HeaderProfileProps) {
+    const fullname = `${dataProfile.first_name} ${dataProfile.last_name}`;
+
+    let handleCount = (number: number): string => {
+        if (number / 1000000 >= 1) {
+            return (number / 1000000).toFixed(1) + 'M';
+        }
+        if (number / 1000 >= 1) {
+            return (number / 1000).toFixed(1) + 'K';
+        }
+        return number.toString();
+    };
+
     return (
-        <Stack direction="row" mb="20px">
+        <Stack direction="row" mb="20px" sx={{ cursor: 'default' }}>
             <Stack width="532px">
                 <Stack direction="row" alignItems="center">
                     <Box width="116px" height="116px">
-                        <Image
-                            src="https://p9-sign-sg.tiktokcdn.com/aweme/100x100/tos-alisg-avt-0068/864f04a883f2fc59568079c98c4c61e4.jpeg?x-expires=1662541200&x-signature=nHVUzqY62J4QRwTcu210uM7hCws%3D"
-                            alt="avatar"
-                            className="avatar"
-                            width="116px"
-                            height="116px"
-                        />
+                        <Image src={dataProfile.avatar} alt="avatar" className="avatar" width="116px" height="116px" />
                     </Box>
 
                     <Box ml="20px" flex="1">
@@ -32,7 +41,7 @@ export default function HeaderProfile(props: HeaderProfileProps) {
                             textAlign="left"
                             whiteSpace="nowrap"
                         >
-                            dyluccc
+                            {dataProfile.nickname}
                         </Typography>
                         <Typography
                             component="h3"
@@ -44,7 +53,7 @@ export default function HeaderProfile(props: HeaderProfileProps) {
                             whiteSpace="nowrap"
                             maxWidth="450px"
                         >
-                            em an com chua
+                            {fullname}
                         </Typography>
                         <Box mt="16px">
                             <Button
@@ -67,7 +76,7 @@ export default function HeaderProfile(props: HeaderProfileProps) {
                 <Stack direction="row" component="h2" mt="22px" spacing={3} mb="0">
                     <Stack direction="row" alignItems="center">
                         <Typography fontSize="18px" color="#121212bf" fontWeight="bold" lineHeight="25px">
-                            109
+                            {handleCount(dataProfile.followings_count)}
                         </Typography>
                         <Typography ml="6px" color="#121212bf" lineHeight="22px">
                             Following
@@ -76,7 +85,7 @@ export default function HeaderProfile(props: HeaderProfileProps) {
 
                     <Stack direction="row" alignItems="center">
                         <Typography fontSize="18px" color="#121212bf" fontWeight="bold" lineHeight="25px">
-                            441
+                            {handleCount(dataProfile.followers_count)}
                         </Typography>
                         <Typography ml="6px" color="#121212bf" lineHeight="22px">
                             Followers
@@ -85,7 +94,7 @@ export default function HeaderProfile(props: HeaderProfileProps) {
 
                     <Stack direction="row" alignItems="center">
                         <Typography fontSize="18px" color="#121212bf" fontWeight="bold" lineHeight="25px">
-                            28.3K
+                            {handleCount(dataProfile.likes_count)}
                         </Typography>
                         <Typography ml="6px" color="#121212bf" lineHeight="22px">
                             Likes
@@ -94,7 +103,7 @@ export default function HeaderProfile(props: HeaderProfileProps) {
                 </Stack>
 
                 <Typography component="h2" variant="body1" color="#121212" lineHeight="22px" mt="10px">
-                    No bio yet.
+                    {dataProfile.bio ? dataProfile.bio : 'No bio yet.'}
                 </Typography>
             </Stack>
 

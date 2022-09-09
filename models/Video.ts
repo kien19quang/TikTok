@@ -1,19 +1,4 @@
-export interface user {
-    id: number;
-    avatar: string;
-    bio: string;
-    facebook_url: string;
-    first_name: string;
-    followers_count: string;
-    followings_count: string;
-    instagram_url: string;
-    is_followed: boolean;
-    last_name: string;
-    likes_count: number;
-    nickname: string;
-    tick: boolean;
-    youtube_url: string;
-}
+import { User } from './User';
 
 export interface ModelVideo {
     id: number | string;
@@ -25,5 +10,7 @@ export interface ModelVideo {
     shares_count: number;
     music: string;
     thumb_url: string;
-    user: user;
+    user: User;
+    viewable?: string;
+    views_count?: number;
 }

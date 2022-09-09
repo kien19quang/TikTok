@@ -34,7 +34,25 @@ export function Sidebar(props: SidebarProps) {
     }, [page, per_page]);
 
     return (
-        <Box component="aside" padding="20px 0 26px" overflow="auto">
+        <Box
+            component="aside"
+            padding="20px 0 26px"
+            position="fixed"
+            top="60px"
+            bottom="0"
+            width="356px"
+            bgcolor="white"
+            pr="8px"
+            sx={{
+                overflowY: 'auto',
+                '&::-webkit-scrollbar': {
+                    width: '0px',
+                },
+                '&:hover::-webkit-scrollbar': {
+                    width: '6px',
+                },
+            }}
+        >
             <Menu>
                 <MenuItem title="For Your" to={routes.home} icon={<HomeIcon />} iconActive={<HomeIconActive />} />
                 <MenuItem

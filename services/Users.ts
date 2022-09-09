@@ -1,4 +1,5 @@
 import axiosClient from '@/ApiClient/axiosClient';
+import { User } from '@/models';
 import { Account } from '@/models/Account';
 
 const GetSuggestedUsers = (pageNumber: number, per_page: number): Promise<Account[]> => {
@@ -15,4 +16,18 @@ const GetSuggestedUsers = (pageNumber: number, per_page: number): Promise<Accoun
     });
 };
 
-export { GetSuggestedUsers };
+const GetProfileUser = (profile: string): Promise<User> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await axiosClient({
+                url: `https://tiktok.fullstack.edu.vn/api/users/${profile}`,
+                method: 'get',
+            });
+            resolve(response.data);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+export { GetSuggestedUsers, GetProfileUser };

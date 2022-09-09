@@ -21,7 +21,7 @@ export default function HeroItem({ data }: HeroItemProps) {
     };
 
     return (
-        <Stack direction="row" py="20px" alignItems="flex-start">
+        <Stack direction="row" py="20px" alignItems="flex-start" component="div">
             <Box width="56px" height="56px">
                 <Image
                     src={data.user.avatar || data.file_url}

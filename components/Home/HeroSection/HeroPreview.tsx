@@ -95,7 +95,7 @@ export default function HeroPreview({ nickname, bio }: HeroPreviewProps) {
                 )}
             >
                 <Stack direction="row" alignItems="center">
-                    <Link href="/@lonelyzedlol">
+                    <Link href={`/@${nickname}`}>
                         <MuiLink
                             sx={{
                                 marginRight: '4px',
