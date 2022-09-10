@@ -8,9 +8,7 @@ export interface VideoPreviewProps {
 
 export default function VideoPreview({ data }: VideoPreviewProps) {
     const handleHover = (e: React.MouseEvent<HTMLVideoElement>): void => {
-        console.log(e.target);
-        e.target.play();
-        //(e.target as HTMLVideoElement).play();
+        (e.target as HTMLVideoElement).play();
     };
 
     const handleMouseOut = (e: React.MouseEvent<HTMLVideoElement>): void => {

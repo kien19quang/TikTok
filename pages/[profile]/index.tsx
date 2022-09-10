@@ -9,9 +9,9 @@ export interface ProfileProps {}
 
 export default function Profile(props: ProfileProps) {
     const router = useRouter();
-    const profile: string = `${router.query?.profile}` ?? '';
+    const profile: string = router.query?.profile ? `${router.query.profile}` : '';
 
-    if (profile[0] !== '@') {
+    if (profile[0] !== '@' && profile !== '') {
         return <Error statusCode={403} title="Page Not Found" />;
     }
 

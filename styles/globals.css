@@ -75,3 +75,8 @@ a {
   border-radius: 2px;
   cursor: pointer;
 }
+
+.icon-login {
+  position: absolute;
+  left: 12px;
+}

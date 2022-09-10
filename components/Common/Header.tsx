@@ -8,10 +8,20 @@ import Menu from '../Popper/Menu/Menu';
 import { MenuItems, ModelMenuItem } from '@/models';
 import Link from 'next/link';
 import Search from '../Search/Search';
+import { Authen, Login } from '../Auth';
+import { useState } from 'react';
 
 export function Header() {
     let handleMenuChange = (item: ModelMenuItem) => {};
+    let [isOpenModal, setIsOpenModal] = useState<boolean>(false);
 
+    let handleLogin = () => {
+        setIsOpenModal(true);
+    };
+
+    let handleClose = () => {
+        setIsOpenModal(false);
+    };
     return (
         <Box
             boxShadow="0px 1px 1px rgb(0 0 0 / 12%)"
@@ -76,6 +86,7 @@ export function Header() {
                                 },
                             }}
                             size="medium"
+                            onClick={handleLogin}
                         >
                             Log in
                         </Button>
@@ -95,6 +106,8 @@ export function Header() {
                     </Stack>
                 </Stack>
             </Container>
+
+            <Authen isOpen={isOpenModal} close={handleClose} />
         </Box>
     );
 }
