@@ -5,3 +5,4 @@ export * from './Icons';
 export * from './Account';
 export * from './Video';
 export * from './User';
+export * from './Feedback';

@@ -1,7 +1,7 @@
 import { User } from './User';
 
 export interface ModelVideo {
-    id: number | string;
+    id: number;
     description: string;
     file_url: string;
     is_liked: boolean;

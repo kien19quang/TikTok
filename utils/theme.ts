@@ -88,6 +88,13 @@ let theme = createTheme({
                     },
                 },
                 {
+                    props: { variant: 'outlined' },
+                    style: {
+                        textTransform: 'none',
+                        minWidth: '106px',
+                    },
+                },
+                {
                     props: { variant: 'text' },
                     style: {
                         '&:hover': {

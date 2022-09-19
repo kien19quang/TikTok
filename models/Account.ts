@@ -13,3 +13,9 @@ export interface Account {
     is_followed: boolean;
     tick: boolean;
 }
+
+export interface Auth {
+    email: string;
+    password: string;
+    type?: string;
+}

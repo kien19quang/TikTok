@@ -12,7 +12,7 @@ export default function Profile(props: ProfileProps) {
     const profile: string = router.query?.profile ? `${router.query.profile}` : '';
 
     if (profile[0] !== '@' && profile !== '') {
-        return <Error statusCode={403} title="Page Not Found" />;
+        return null;
     }
 
     return (

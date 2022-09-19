@@ -3,20 +3,34 @@ import Link from 'next/link';
 import Tippy from '@tippyjs/react/headless';
 import Image from 'next/image';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { forwardRef } from 'react';
+import { User } from '@/models';
 
 export interface HeroPreviewProps {
     nickname: string;
     bio: string;
+    children: React.ReactElement;
+    offset?: [number, number];
+    user: User;
 }
 
-export default function HeroPreview({ nickname, bio }: HeroPreviewProps) {
+function HeroPreview({ children, nickname, bio, offset, user }: HeroPreviewProps) {
+    let handleNumberFarorites = (number: number): string => {
+        let n = number / 1000;
+        if (n < 1) {
+            return number.toString();
+        }
+        let view = n.toFixed(1);
+        return view + 'K';
+    };
+
     return (
-        <Box>
+        <Box flexGrow={1}>
             <Tippy
                 interactive
                 delay={[800, 0]}
                 placement="bottom-start"
-                offset={[-70, 35]}
+                offset={offset || undefined}
                 render={(attrs) => (
                     <Box
                         component="div"
@@ -36,7 +50,7 @@ export default function HeroPreview({ nickname, bio }: HeroPreviewProps) {
                             sx={{ cursor: 'pointer' }}
                         >
                             <Image
-                                src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-aiso/20fd837c82944e9cf55c9f37f9281f19~c5_100x100.jpeg?x-expires=1662458400&x-signature=PFwF5vWF5KIehubo6eNntHCYMLI%3D"
+                                src={user.avatar}
                                 alt="avatar"
                                 width="44px"
                                 height="44px"
@@ -84,47 +98,20 @@ export default function HeroPreview({ nickname, bio }: HeroPreviewProps) {
                         </Typography>
 
                         <Stack direction="row" pt="10px" spacing="6px" fontSize="17px">
-                            <Typography fontWeight="bold">9.3M</Typography>
+                            <Typography fontWeight="bold">{handleNumberFarorites(user.followers_count)}</Typography>
                             <Typography color="#161823bf" paddingRight="6px">
                                 Follower
                             </Typography>
-                            <Typography fontWeight="bold">151.6M</Typography>
+                            <Typography fontWeight="bold">{handleNumberFarorites(user.likes_count)}</Typography>
                             <Typography color="#161823bf">Likes</Typography>
                         </Stack>
                     </Box>
                 )}
             >
-                <Stack direction="row" alignItems="center">
-                    <Link href={`/@${nickname}`}>
-                        <MuiLink
-                            sx={{
-                                marginRight: '4px',
-                            }}
-                        >
-                            <Typography
-                                component="h3"
-                                variant="body1"
-                                sx={{
-                                    fontWeight: 'bold',
-                                    fontSize: '18px',
-                                    lineHeight: '25px',
-                                }}
-                            >
-                                {nickname}
-                            </Typography>
-                        </MuiLink>
-                    </Link>
-                    <Typography
-                        fontSize="14px"
-                        lineHeight="25px"
-                        component="h4"
-                        variant="body1"
-                        sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                    >
-                        {bio}
-                    </Typography>
-                </Stack>
+                {children}
             </Tippy>
         </Box>
     );
 }
+
+export default HeroPreview;

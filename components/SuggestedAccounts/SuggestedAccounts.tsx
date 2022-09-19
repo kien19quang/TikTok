@@ -24,7 +24,7 @@ export default function SuggestedAccounts({ label, list }: SuggestedAccountsProp
                 ? list.map((dataAccount: Account) => {
                       return <AccountItem key={dataAccount.id} data={dataAccount} />;
                   })
-                : list.slice(0, 3).map((dataAccount: Account) => {
+                : list.slice(0, 5).map((dataAccount: Account) => {
                       return <AccountItem key={dataAccount.id} data={dataAccount} />;
                   })}
 

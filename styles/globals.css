@@ -78,5 +78,68 @@ a {
 
 .icon-login {
   position: absolute;
-  left: 12px;
+  left: 12px; 
+}
+
+
+.tippy-box {
+  background-color: rgba(84, 84, 84, 0.92) !important;
+  color: white;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  padding: 3px 4px 5px;
+  border-radius: 10px !important;
+  cursor: default;
+}
+
+.tippy-arrow {
+  color: rgba(84, 84, 84, 0.92) !important;
+  
+}
+
+a {
+  color: '#161823';
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes grow-up {
+  from {
+    transform: scale(0.2);
+  }
+  to {
+    transform:  scale(1);
+  }
+}
+
+@keyframes grow-down {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.2);
+  }
 }

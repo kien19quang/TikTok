@@ -54,7 +54,7 @@ export function Sidebar(props: SidebarProps) {
             }}
         >
             <Menu>
-                <MenuItem title="For Your" to={routes.home} icon={<HomeIcon />} iconActive={<HomeIconActive />} />
+                <MenuItem title="For You" to={routes.home} icon={<HomeIcon />} iconActive={<HomeIconActive />} />
                 <MenuItem
                     title="Following"
                     to={routes.following}

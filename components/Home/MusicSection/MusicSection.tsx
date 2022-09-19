@@ -9,7 +9,7 @@ export default function MusicSection(props: MusicSectionProps) {
     return (
         <Box>
             <MusicHeader />
-            <VideoPreview />
+            {/*<VideoPreview />*/}
         </Box>
     );
 }
