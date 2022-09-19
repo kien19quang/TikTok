@@ -9,7 +9,6 @@ export default function TagSection(props: TagSectionProps) {
     return (
         <Box>
             <TagHeader />
-            <VideoPreview />
         </Box>
     );
 }

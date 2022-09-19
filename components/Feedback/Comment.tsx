@@ -24,7 +24,14 @@ export default function Comment({ data }: CommentProps) {
         <Box mb="16px">
             <Stack direction="row" mb="16px" alignItems="flex-start">
                 <Box mr="12px" width="40px" height="40px" sx={{ cursor: 'pointer' }}>
-                    <Image src={data.user.avatar} width="40px" height="40px" className="avatar" objectFit="cover" />
+                    <Image
+                        src={data.user.avatar}
+                        alt="avatar"
+                        width="40px"
+                        height="40px"
+                        className="avatar"
+                        objectFit="cover"
+                    />
                 </Box>
 
                 <Box flexGrow={1}>

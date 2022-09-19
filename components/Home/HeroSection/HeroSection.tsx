@@ -21,7 +21,7 @@ export function HeroSection(props: HeroSectionProps) {
         };
 
         getVideosList();
-    }, [pageNumber]);
+    }, [pageNumber, token]);
 
     return (
         <Box>

@@ -48,13 +48,13 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
             setListComments(res);
         };
         getComments();
-    }, []);
+    }, [data.id, pageNumber, token]);
 
     useEffect(() => {
         if (videoRef.current) {
             videoRef.current.play();
         }
-    }, [videoRef.current]);
+    }, []);
 
     const fullname = `${data.user.first_name} ${data.user.last_name}`;
     let handleNumberFarorites = (number: number): string => {

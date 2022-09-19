@@ -50,6 +50,7 @@ export function Header() {
                                     width="32px"
                                     height="32px"
                                     className="avatar"
+                                    alt="avatar"
                                 />
                             </Box>
                         </Menu>

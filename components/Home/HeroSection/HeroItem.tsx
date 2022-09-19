@@ -19,14 +19,6 @@ function HeroItem({ data }: HeroItemProps) {
         threshold: 0.7,
         trackVisibility: true,
         delay: 800,
-        //onChange: (inView: boolean, entry): void => {
-        //    if (inView === true) {
-        //        videoRef.current?.play();
-        //    }
-        //    if (inView === false) {
-        //        videoRef.current?.pause();
-        //    }
-        //},
     });
 
     useEffect(() => {
@@ -36,7 +28,7 @@ function HeroItem({ data }: HeroItemProps) {
         if (!inView && videoRef.current) {
             videoRef.current.pause();
         }
-    }, [inView, videoRef.current]);
+    }, [inView]);
 
     return (
         <Stack direction="row" py="20px" alignItems="flex-start" component="div">
