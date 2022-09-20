@@ -24,6 +24,7 @@ export default function FeedBack({ data, videoRef }: FeedBackProps) {
     const [isLiked, setIsLiked] = useState<boolean>(data.is_liked);
     const [feedBack, setFeedBack] = useState<ModelVideo>(data);
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [commentsCount, setCommentsCount] = useState<number>(data.comments_count);
 
     const token = useAppSelector<string>((state: RootState) => state.user.token);
     const pageNumber = useAppSelector<number>((state: RootState) => state.page.pageNumber);
@@ -37,16 +38,29 @@ export default function FeedBack({ data, videoRef }: FeedBackProps) {
         return view + 'K';
     };
 
+    let handleUnlikeVideo = async () => {
+        setIsLiked(false);
+        let res = await UnLikeAVideo(data.id, pageNumber, token);
+        setFeedBack(res);
+    };
+
+    let handleLikeVideo = async () => {
+        setIsLiked(true);
+        let res = await LikeAVideo(data.id, pageNumber, token);
+        setFeedBack(res);
+    };
+
+    let handleCommentCount = (amount: number): void => {
+        console.log('amount: ', amount);
+        setCommentsCount(amount);
+    };
+
     let handleFeedback = async (type: string) => {
         if (type === 'like') {
             if (isLiked) {
-                setIsLiked(false);
-                let res = await UnLikeAVideo(feedBack.id, pageNumber, token);
-                setFeedBack(res);
+                handleUnlikeVideo();
             } else {
-                setIsLiked(true);
-                let res = await LikeAVideo(feedBack.id, pageNumber, token);
-                setFeedBack(res);
+                handleLikeVideo();
             }
         }
         if (type === 'comment') {
@@ -88,14 +102,14 @@ export default function FeedBack({ data, videoRef }: FeedBackProps) {
                     <Box component="button" onClick={() => handleFeedback('like')}>
                         {isLiked ? <TymIconActive /> : <TymIcon />}
                     </Box>
-                    <Typography sx={styledCount}>{handleNumberFarorites(feedBack.likes_count)}</Typography>
+                    <Typography sx={styledCount}>{feedBack.likes_count}</Typography>
                 </Stack>
 
                 <Stack spacing={1}>
                     <Box component="button" onClick={() => handleFeedback('comment')}>
                         <CommentIcon />
                     </Box>
-                    <Typography sx={styledCount}>{handleNumberFarorites(feedBack.comments_count)}</Typography>
+                    <Typography sx={styledCount}>{handleNumberFarorites(commentsCount)}</Typography>
                 </Stack>
 
                 <Stack spacing={1}>
@@ -105,7 +119,17 @@ export default function FeedBack({ data, videoRef }: FeedBackProps) {
                     <Typography sx={styledCount}>{handleNumberFarorites(feedBack.shares_count)}</Typography>
                 </Stack>
             </Stack>
-            {isOpen && <VideoDetail isOpen={isOpen} close={handleClose} data={data} />}
+            {isOpen && (
+                <VideoDetail
+                    isOpen={isOpen}
+                    close={handleClose}
+                    data={feedBack}
+                    LikeVideo={handleLikeVideo}
+                    UnlikeVideo={handleUnlikeVideo}
+                    isLiked={isLiked}
+                    commentsCount={handleCommentCount}
+                />
+            )}
         </>
     );
 }

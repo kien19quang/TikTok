@@ -107,6 +107,11 @@ a:hover {
 }
 
 
+.more-icon {
+  color: black;
+  cursor: pointer;
+}
+
 
 @keyframes fade-in {
   from {

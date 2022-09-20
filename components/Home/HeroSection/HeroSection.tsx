@@ -1,5 +1,6 @@
-import { useAppSelector } from '@/app/hooks';
-import { User } from '@/models';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
+import { setIsReloadPage } from '@/features/Page/PageSlice';
 import { ModelVideo } from '@/models/Video';
 import { GetVideosList } from '@/services/GetVideoService';
 import { Box } from '@mui/material';
@@ -10,9 +11,12 @@ export interface HeroSectionProps {}
 
 export function HeroSection(props: HeroSectionProps) {
     const pageNumber = useAppSelector<number>((state) => state.page.pageNumber);
+    const isReloadPage = useAppSelector<boolean>((state: RootState) => state.page.isReloadPage);
     const [dataVideos, setDataVideos] = useState<ModelVideo[]>([]);
 
     const token = useAppSelector<string>((state) => state.user.token);
+
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         let getVideosList = async () => {

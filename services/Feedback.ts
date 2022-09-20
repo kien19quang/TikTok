@@ -5,9 +5,9 @@ const LikeAVideo = (id: number, pageNumber: number, token: string): Promise<Mode
     return new Promise(async (resolve, reject) => {
         try {
             let response = await axiosClient({
-                url: `https://tiktok.fullstack.edu.vn/api/videos/${pageNumber}/like`,
+                url: `https://tiktok.fullstack.edu.vn/api/videos/1/like`,
                 method: 'POST',
-                data: { id: id },
+                data: { id: id.toString() },
                 headers: {
                     Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
@@ -25,6 +25,44 @@ const UnLikeAVideo = (id: number, pageNumber: number, token: string): Promise<Mo
         try {
             let response = await axiosClient({
                 url: `https://tiktok.fullstack.edu.vn/api/videos/${pageNumber}/unlike`,
+                method: 'POST',
+                data: { id: id.toString() },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            resolve(response.data);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+const likeAComment = (id: number, pageNumber: number, token: string): Promise<Feedback> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await axiosClient({
+                url: `https://tiktok.fullstack.edu.vn/api/comments/${pageNumber}/like`,
+                method: 'POST',
+                data: { id: id },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            resolve(response.data);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+const unlikeAComment = (id: number, pageNumber: number, token: string): Promise<Feedback> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await axiosClient({
+                url: `https://tiktok.fullstack.edu.vn/api/comments/${pageNumber}/unlike`,
                 method: 'POST',
                 data: { id: id },
                 headers: {
@@ -57,4 +95,40 @@ const getCommentsAVideo = (id: number, pageNumber: number, token: string): Promi
     });
 };
 
-export { LikeAVideo, UnLikeAVideo, getCommentsAVideo };
+const createANewComment = (uuid: string, token: string, data: any): Promise<Feedback> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let response = await axiosClient({
+                url: `https://tiktok.fullstack.edu.vn/api/videos/${uuid}/comments`,
+                method: 'POST',
+                data,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+            resolve(response.data);
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+const deleteAComment = (id: number, pageNumber: number, token: string): Promise<void> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await axiosClient({
+                url: `https://tiktok.fullstack.edu.vn/api/comments/${pageNumber}?id=${id}`,
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+export { LikeAVideo, UnLikeAVideo, likeAComment, unlikeAComment, getCommentsAVideo, createANewComment, deleteAComment };

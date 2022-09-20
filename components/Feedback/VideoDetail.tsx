@@ -1,20 +1,25 @@
-import { useAppSelector } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
+import { setIsReloadPage } from '@/features/Page/PageSlice';
 import { Feedback, ModelVideo } from '@/models';
-import { getCommentsAVideo } from '@/services/Feedback';
+import { createANewComment, getCommentsAVideo } from '@/services/Feedback';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, Input, Modal, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import HeroPreview from '../Home/HeroSection/HeroPreview';
-import { CommentIcon, MusicIcon, ShareIcon, TymIcon } from '../Icons';
+import { CommentIcon, MusicIcon, ShareIcon, TymIcon, TymIconActive } from '../Icons';
 import Comment from './Comment';
 
 export interface VideoDetailProps {
     isOpen: boolean;
-    close: () => void;
     data: ModelVideo;
+    isLiked: boolean;
+    LikeVideo: () => void;
+    UnlikeVideo: () => void;
+    close: () => void;
+    commentsCount: (amount: number) => void;
 }
 
 const style = {
@@ -35,10 +40,20 @@ const styledCount = {
     fontWeight: 'bold',
 };
 
-export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
+export default function VideoDetail({
+    isOpen,
+    close,
+    data,
+    LikeVideo,
+    UnlikeVideo,
+    isLiked,
+    commentsCount,
+}: VideoDetailProps) {
     const [listComments, setListComments] = useState<Feedback[]>([]);
+    const [valueComment, setValueComment] = useState<string>('');
 
     const videoRef = useRef<HTMLVideoElement>();
+    const inputRef = useRef<HTMLInputElement>();
     const pageNumber = useAppSelector<number>((state: RootState) => state.page.pageNumber);
     const token = useAppSelector<string>((state: RootState) => state.user.token);
 
@@ -64,6 +79,35 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
         }
         let view = n.toFixed(1);
         return view + 'K';
+    };
+
+    let handleLikeVideo = () => {
+        if (isLiked) {
+            UnlikeVideo();
+        } else {
+            LikeVideo();
+        }
+    };
+
+    let handleChangeValueComment = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        setValueComment(e.target.value);
+    };
+
+    let handleCreateComment = async () => {
+        let res = await createANewComment(data.uuid, token, {
+            comment: valueComment,
+        });
+
+        commentsCount(listComments.length + 1);
+        setListComments((prev) => [...prev, res]);
+        setValueComment('');
+        inputRef.current?.focus();
+    };
+
+    let handleRemoveComment = (id: number) => {
+        let copyListComment: Feedback[] = listComments.filter((item) => item.id !== id && item);
+        commentsCount(copyListComment.length);
+        setListComments(copyListComment);
     };
 
     let handleClose = () => {
@@ -224,8 +268,8 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
                                         }}
                                     >
                                         <Stack spacing={0.5} direction="row" alignItems="center">
-                                            <Box component="button">
-                                                <TymIcon />
+                                            <Box component="button" onClick={handleLikeVideo}>
+                                                {isLiked ? <TymIconActive /> : <TymIcon />}
                                             </Box>
                                             <Typography sx={styledCount}>
                                                 {handleNumberFarorites(data.likes_count)}
@@ -237,7 +281,7 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
                                                 <CommentIcon />
                                             </Box>
                                             <Typography sx={styledCount}>
-                                                {handleNumberFarorites(data.comments_count)}
+                                                {handleNumberFarorites(listComments.length)}
                                             </Typography>
                                         </Stack>
                                     </Stack>
@@ -260,7 +304,7 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
                             }}
                         >
                             {listComments.map((item) => (
-                                <Comment key={item.id} data={item} />
+                                <Comment key={item.id} data={item} removeComment={handleRemoveComment} />
                             ))}
                         </Stack>
 
@@ -284,6 +328,9 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
                                     placeholder="Add comment..."
                                     spellCheck="false"
                                     disableUnderline
+                                    inputRef={inputRef}
+                                    value={valueComment}
+                                    onChange={handleChangeValueComment}
                                     sx={{
                                         backgroundColor: 'transparent',
                                         height: '100%',
@@ -297,6 +344,8 @@ export default function VideoDetail({ isOpen, close, data }: VideoDetailProps) {
 
                             <Button
                                 variant="text"
+                                disabled={!valueComment}
+                                onClick={handleCreateComment}
                                 sx={{
                                     fontSize: '14px',
                                     textTransform: 'none',

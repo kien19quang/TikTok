@@ -16,6 +16,11 @@ export interface ModelMenuItem {
     children?: subMenu;
 }
 
+export type MenuComment = ModelMenuItem & {
+    icon: OverridableComponent<SvgIconTypeMap> & { muiName: string };
+    type: string;
+};
+
 export const MenuItems: ModelMenuItem[] = [
     {
         icon: LanguageIcon,

@@ -14,15 +14,15 @@ export interface HeroPreviewProps {
     user: User;
 }
 
-function HeroPreview({ children, nickname, bio, offset, user }: HeroPreviewProps) {
-    let handleNumberFarorites = (number: number): string => {
-        let n = number / 1000;
-        if (n < 1) {
-            return number.toString();
-        }
-        let view = n.toFixed(1);
-        return view + 'K';
-    };
+export default function HeroPreview({ children, nickname, bio, offset, user }: HeroPreviewProps) {
+    //let handleNumberFarorites = (number: number): string => {
+    //    let n = number / 1000;
+    //    if (n < 1) {
+    //        return number.toString();
+    //    }
+    //    let view = n.toFixed(1);
+    //    return view + 'K';
+    //};
 
     return (
         <Box flexGrow={1}>
@@ -98,11 +98,11 @@ function HeroPreview({ children, nickname, bio, offset, user }: HeroPreviewProps
                         </Typography>
 
                         <Stack direction="row" pt="10px" spacing="6px" fontSize="17px">
-                            <Typography fontWeight="bold">{handleNumberFarorites(user.followers_count)}</Typography>
+                            <Typography fontWeight="bold">{user.followers_count}</Typography>
                             <Typography color="#161823bf" paddingRight="6px">
                                 Follower
                             </Typography>
-                            <Typography fontWeight="bold">{handleNumberFarorites(user.likes_count)}</Typography>
+                            <Typography fontWeight="bold">{user.likes_count}</Typography>
                             <Typography color="#161823bf">Likes</Typography>
                         </Stack>
                     </Box>
@@ -113,5 +113,3 @@ function HeroPreview({ children, nickname, bio, offset, user }: HeroPreviewProps
         </Box>
     );
 }
-
-export default HeroPreview;

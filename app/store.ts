@@ -23,7 +23,7 @@ const userPersistConfig = {
 export const store = configureStore({
     reducer: {
         user: persistReducer<user>(userPersistConfig, userReducer),
-        page: persistReducer<Page>(persistConfig, pageReducer),
+        page: pageReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

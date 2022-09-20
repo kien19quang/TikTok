@@ -2,6 +2,7 @@ import { User } from './User';
 
 export interface ModelVideo {
     id: number;
+    uuid: string;
     description: string;
     file_url: string;
     is_liked: boolean;
