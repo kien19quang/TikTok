@@ -1,15 +1,15 @@
 import { useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
 import { Feedback, MenuComment, User } from '@/models';
+import { FollowAnUser, UnFollowAnUser } from '@/services';
 import { deleteAComment, likeAComment, unlikeAComment } from '@/services/Feedback';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FlagOutlinedIcon from '@mui/icons-material/FlagOutlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import UpdateIcon from '@mui/icons-material/Update';
-import { Box, Button, Link as MuiLink, Stack, Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 import Tippy from '@tippyjs/react/headless';
 import Image from 'next/image';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import HeroPreview from '../Home/HeroSection/HeroPreview';
 import { MoreIcon, TymIconActive, TymIconOutLine } from '../Icons';
@@ -30,9 +30,11 @@ export default function Comment({ data, removeComment }: CommentProps) {
     const token = useAppSelector<string>((state: RootState) => state.user.token);
     const pageNumber = useAppSelector<number>((state: RootState) => state.page.pageNumber);
 
+    const [isFollowed, setIsFollowed] = useState<boolean>(data.user.is_followed);
     const [isLiked, setIsLiked] = useState<boolean>(data.is_liked);
     const [dataComment, setDataComment] = useState<Feedback>(data);
 
+    const router = useRouter();
     const forMe = data.user.id === userData.id;
 
     let handleNumberFarorites = (number: number): string => {
@@ -147,6 +149,26 @@ export default function Comment({ data, removeComment }: CommentProps) {
         }
     };
 
+    let handleFollow = async () => {
+        if (isFollowed) {
+            setIsFollowed(false);
+            let res = await UnFollowAnUser(dataComment.user.id, pageNumber, token);
+            let copyDataComment = { ...dataComment };
+            copyDataComment = { ...dataComment, user: { ...res } };
+            setDataComment(copyDataComment);
+        } else {
+            setIsFollowed(true);
+            let res = await FollowAnUser(dataComment.user.id, pageNumber, token);
+            let copyDataComment = { ...dataComment };
+            copyDataComment = { ...dataComment, user: { ...res } };
+            setDataComment(copyDataComment);
+        }
+    };
+
+    let handleArriveProfile = () => {
+        router.push(`/@${dataComment.user.nickname}`);
+    };
+
     return (
         <Box mb="16px">
             <Stack direction="row" mb="16px" alignItems="flex-start">
@@ -162,24 +184,29 @@ export default function Comment({ data, removeComment }: CommentProps) {
                 </Box>
 
                 <Box flexGrow={1}>
-                    <Link href="/@profile">
-                        <MuiLink>
-                            <HeroPreview
-                                nickname={dataComment.user.nickname}
-                                bio={dataComment.user.bio}
-                                user={dataComment.user}
+                    <HeroPreview
+                        nickname={dataComment.user.nickname}
+                        bio={dataComment.user.bio}
+                        user={dataComment.user}
+                        isFollow={isFollowed}
+                        follow={handleFollow}
+                    >
+                        <Box component="div" width="fit-content" onClick={handleArriveProfile}>
+                            <Typography
+                                fontSize="18px"
+                                fontWeight="bold"
+                                lineHeight="25px"
+                                sx={{
+                                    cursor: 'pointer',
+                                    ':hover': {
+                                        textDecoration: 'underline',
+                                    },
+                                }}
                             >
-                                <Typography
-                                    fontSize="18px"
-                                    fontWeight="bold"
-                                    lineHeight="25px"
-                                    sx={{ cursor: 'pointer' }}
-                                >
-                                    {dataComment.user.nickname}
-                                </Typography>
-                            </HeroPreview>
-                        </MuiLink>
-                    </Link>
+                                {dataComment.user.nickname}
+                            </Typography>
+                        </Box>
+                    </HeroPreview>
                     <Typography
                         lineHeight="22px"
                         whiteSpace="pre-line"

@@ -12,17 +12,23 @@ export interface HeroPreviewProps {
     children: React.ReactElement;
     offset?: [number, number];
     user: User;
+    isFollow: boolean;
+    follow: () => void;
 }
 
-export default function HeroPreview({ children, nickname, bio, offset, user }: HeroPreviewProps) {
-    //let handleNumberFarorites = (number: number): string => {
-    //    let n = number / 1000;
-    //    if (n < 1) {
-    //        return number.toString();
-    //    }
-    //    let view = n.toFixed(1);
-    //    return view + 'K';
-    //};
+export default function HeroPreview({ children, nickname, bio, offset, user, follow, isFollow }: HeroPreviewProps) {
+    let handleNumberFarorites = (number: number): string => {
+        let n = number / 1000;
+        if (n < 1) {
+            return number.toString();
+        }
+        let view = n.toFixed(1);
+        return view + 'K';
+    };
+
+    let handleFollow = () => {
+        follow();
+    };
 
     return (
         <Box flexGrow={1}>
@@ -59,6 +65,8 @@ export default function HeroPreview({ children, nickname, bio, offset, user }: H
                             />
                             <Button
                                 variant="outlined"
+                                color={`${isFollow ? 'secondary' : 'primary'}`}
+                                onClick={handleFollow}
                                 sx={{
                                     fontSize: '16px',
                                     fontWeight: '500',
@@ -68,7 +76,7 @@ export default function HeroPreview({ children, nickname, bio, offset, user }: H
                                 }}
                                 size="medium"
                             >
-                                Follow
+                                {isFollow ? 'Following' : 'Follow'}
                             </Button>
                         </Stack>
                         <Stack direction="row" alignItems="center" pb="4px" sx={{ cursor: 'pointer' }}>

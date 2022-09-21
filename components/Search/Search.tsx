@@ -49,6 +49,11 @@ export default function Search(props: SearchProps) {
         inputRef.current?.focus();
     };
 
+    let handleCloseSearch = (): void => {
+        setSearchValue('');
+        setSearchResult([]);
+    };
+
     return (
         <Tippy
             placement="bottom"
@@ -68,7 +73,7 @@ export default function Search(props: SearchProps) {
                             Accounts
                         </Typography>
                         {searchResult.map((result: ModelSearch) => (
-                            <AccountItem key={result.id} data={result} />
+                            <AccountItem key={result.id} data={result} close={handleCloseSearch} />
                         ))}
                     </PopperWrapper>
                 </Box>

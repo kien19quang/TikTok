@@ -102,6 +102,22 @@ let theme = createTheme({
                         },
                     },
                 },
+                {
+                    props: { variant: 'outlined', color: 'secondary' },
+                    style: {
+                        color: 'rgb(22, 24, 35)',
+                        border: '1px solid rgb(22, 24, 35, 0.12)',
+                        backgroundColor: 'white',
+                        borderRadius: '4px',
+                        fontSize: '16px',
+                        fontWeight: '600',
+
+                        '&:hover': {
+                            borderColor: 'rgb(208, 209, 211)',
+                            backgroundColor: 'rgb(248, 248, 248)',
+                        },
+                    },
+                },
             ],
         },
         MuiChip: {

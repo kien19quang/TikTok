@@ -1,5 +1,6 @@
 import { useAppSelector } from '@/app/hooks';
 import { RootState } from '@/app/store';
+import { Authen } from '@/components/Auth';
 import VideoDetail from '@/components/Feedback/VideoDetail';
 import { CommentIcon, ShareIcon, TymIcon, TymIconActive } from '@/components/Icons';
 import { ModelVideo } from '@/models';
@@ -10,6 +11,8 @@ import { MutableRefObject, useState } from 'react';
 export interface FeedBackProps {
     data: ModelVideo;
     videoRef: MutableRefObject<HTMLVideoElement | undefined>;
+    isFollow: boolean;
+    follow: () => void;
 }
 
 const styledCount = {
@@ -20,14 +23,16 @@ const styledCount = {
     fontWeight: 'bold',
 };
 
-export default function FeedBack({ data, videoRef }: FeedBackProps) {
+export default function FeedBack({ data, videoRef, isFollow, follow }: FeedBackProps) {
     const [isLiked, setIsLiked] = useState<boolean>(data.is_liked);
     const [feedBack, setFeedBack] = useState<ModelVideo>(data);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [commentsCount, setCommentsCount] = useState<number>(data.comments_count);
+    const [isOpenAuth, setIsOpenAuth] = useState<boolean>(false);
 
     const token = useAppSelector<string>((state: RootState) => state.user.token);
     const pageNumber = useAppSelector<number>((state: RootState) => state.page.pageNumber);
+    const isLoggedIn = useAppSelector<boolean>((state: RootState) => state.user.isLoggedIn);
 
     let handleNumberFarorites = (number: number): string => {
         let n = number / 1000;
@@ -51,27 +56,42 @@ export default function FeedBack({ data, videoRef }: FeedBackProps) {
     };
 
     let handleCommentCount = (amount: number): void => {
-        console.log('amount: ', amount);
         setCommentsCount(amount);
     };
 
     let handleFeedback = async (type: string) => {
         if (type === 'like') {
-            if (isLiked) {
-                handleUnlikeVideo();
+            if (isLoggedIn) {
+                if (isLiked) {
+                    handleUnlikeVideo();
+                } else {
+                    handleLikeVideo();
+                }
             } else {
-                handleLikeVideo();
+                setIsOpenAuth(true);
             }
         }
         if (type === 'comment') {
-            videoRef.current?.pause();
-            setIsOpen(true);
+            if (!isLoggedIn) {
+                setIsOpenAuth(true);
+            } else {
+                videoRef.current?.pause();
+                setIsOpen(true);
+            }
         }
     };
 
     let handleClose = () => {
         videoRef.current?.play();
         setIsOpen(false);
+    };
+
+    let handleCloseModalAuth = () => {
+        setIsOpenAuth(false);
+        if (isLoggedIn) {
+            videoRef.current?.pause();
+            setIsOpen(true);
+        }
     };
 
     return (
@@ -128,8 +148,11 @@ export default function FeedBack({ data, videoRef }: FeedBackProps) {
                     UnlikeVideo={handleUnlikeVideo}
                     isLiked={isLiked}
                     commentsCount={handleCommentCount}
+                    isFollow={isFollow}
+                    follow={follow}
                 />
             )}
+            {isOpenAuth && <Authen isOpen={isOpenAuth} close={handleCloseModalAuth} />}
         </>
     );
 }

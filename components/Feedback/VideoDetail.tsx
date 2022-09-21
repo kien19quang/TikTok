@@ -20,6 +20,8 @@ export interface VideoDetailProps {
     UnlikeVideo: () => void;
     close: () => void;
     commentsCount: (amount: number) => void;
+    isFollow: boolean;
+    follow: () => void;
 }
 
 const style = {
@@ -48,6 +50,8 @@ export default function VideoDetail({
     UnlikeVideo,
     isLiked,
     commentsCount,
+    isFollow,
+    follow,
 }: VideoDetailProps) {
     const [listComments, setListComments] = useState<Feedback[]>([]);
     const [valueComment, setValueComment] = useState<string>('');
@@ -69,7 +73,8 @@ export default function VideoDetail({
         if (videoRef.current) {
             videoRef.current.play();
         }
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [videoRef.current]);
 
     const fullname = `${data.user.first_name} ${data.user.last_name}`;
     let handleNumberFarorites = (number: number): string => {
@@ -108,6 +113,10 @@ export default function VideoDetail({
         let copyListComment: Feedback[] = listComments.filter((item) => item.id !== id && item);
         commentsCount(copyListComment.length);
         setListComments(copyListComment);
+    };
+
+    let handleFollow = () => {
+        follow();
     };
 
     let handleClose = () => {
@@ -170,9 +179,15 @@ export default function VideoDetail({
                             sx={{ cursor: 'pointer' }}
                             justifyContent="space-between"
                         >
-                            <HeroPreview nickname={data.user.nickname} bio={data.user.bio} user={data.user}>
+                            <HeroPreview
+                                nickname={data.user.nickname}
+                                bio={data.user.bio}
+                                user={data.user}
+                                isFollow={isFollow}
+                                follow={follow}
+                            >
                                 <Stack direction="row" alignItems="center">
-                                    <Link href="/@pro" passHref>
+                                    <Link href={`/@${data.user.nickname}`} passHref>
                                         <Box width="40px" height="40px" mr="12px">
                                             <Image
                                                 src={data.user.avatar}
@@ -184,7 +199,7 @@ export default function VideoDetail({
                                             />
                                         </Box>
                                     </Link>
-                                    <Link href="/@pro" passHref>
+                                    <Link href={`/@${data.user.nickname}`} passHref>
                                         <Box
                                             textOverflow="ellipsis"
                                             overflow="hidden"
@@ -214,13 +229,15 @@ export default function VideoDetail({
                             <Button
                                 variant="outlined"
                                 size="small"
+                                color={`${isFollow ? 'secondary' : 'primary'}`}
+                                onClick={handleFollow}
                                 sx={{
                                     minHeight: '28px',
                                     fontSize: '16px',
                                     fontWeight: '600',
                                 }}
                             >
-                                Follow
+                                {isFollow ? 'Following' : 'Follow'}
                             </Button>
                         </Stack>
 
