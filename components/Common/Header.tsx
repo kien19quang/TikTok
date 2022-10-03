@@ -5,7 +5,7 @@ import { Box, Button, Container, Stack, Typography } from '@mui/material';
 import Image from 'next/image';
 import Menu from '../Popper/Menu/Menu';
 import { useAppSelector } from '@/app/hooks';
-import { MenuItems, ModelMenuItem } from '@/models';
+import { MenuItems, ModelMenuItem, MenuItemsPrivate } from '@/models';
 import Tippy from '@tippyjs/react';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -43,7 +43,7 @@ export function Header() {
                     </Tippy>
 
                     <Box>
-                        <Menu items={MenuItems} onChange={handleMenuChange}>
+                        <Menu items={MenuItemsPrivate} onChange={handleMenuChange}>
                             <Box width="32px" height="32px" ml="24px">
                                 <Image
                                     src="https://p16-sign-va.tiktokcdn.com/tos-useast2a-avt-0068-giso/083ab11e001e50d028ef865b2f0eb91b~c5_720x720.jpeg?x-expires=1663326000&x-signature=BtBYwX1XLpW%2B0R5mabrDE6kNArs%3D"

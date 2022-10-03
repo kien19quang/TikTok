@@ -82,7 +82,7 @@ function HeroItem({ data }: HeroItemProps) {
                         width="56px"
                         height="56px"
                         className="avatar"
-                        objectFit="contain"
+                        objectFit="cover"
                     />
                 </Box>
                 <Stack justifyContent="flex-start" flexGrow="1" ml="12px">

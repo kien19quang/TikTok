@@ -20,12 +20,16 @@ const GetSuggestedUsers = (pageNumber: number, per_page: number, token?: string)
     });
 };
 
-const GetProfileUser = (profile: string): Promise<User> => {
+const GetProfileUser = (profile: string, token: string): Promise<User> => {
     return new Promise(async (resolve, reject) => {
         try {
             let response = await axiosClient({
                 url: `https://tiktok.fullstack.edu.vn/api/users/${profile}`,
                 method: 'get',
+                headers: {
+                    Authorization: token ? 'Bearer  ' + token : '',
+                    'Content-Type': 'application/json',
+                },
             });
             resolve(response.data);
         } catch (e) {

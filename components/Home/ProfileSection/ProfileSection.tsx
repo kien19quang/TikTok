@@ -3,45 +3,56 @@ import { Stack } from '@mui/material';
 import HeaderProfile from './HeaderProfile';
 import React, { useEffect, useState } from 'react';
 import { GetProfileUser } from '@/services/Users';
-import { User } from '@/models';
+import { ModelVideo, User } from '@/models';
+import { useAppSelector } from '@/app/hooks';
+import { RootState } from '@/app/store';
+import { GetUserLikedVideo } from '@/services/GetVideoService';
+import { FollowAnUser, UnFollowAnUser } from '@/services';
 
 export interface ProfileSectionProps {
-    profile: string;
+    profile: User;
 }
 
-const initialProfile = {
-    id: 0,
-    avatar: '',
-    bio: '',
-    facebook_url: '',
-    youtube_url: '',
-    instagram_url: '',
-    first_name: '',
-    last_name: '',
-    followers_count: 0,
-    followings_count: 0,
-    likes_count: 0,
-    is_followed: false,
-    nickname: '',
-    tick: false,
-};
-
 export function ProfileSection({ profile }: ProfileSectionProps) {
-    const [userProfile, setUserProfile] = useState<User>(initialProfile);
+    const dataUser = useAppSelector((state: RootState) => state.user.data);
+    const token = useAppSelector((state: RootState) => state.user.token);
+    const myProfile: boolean = profile.id === dataUser.id;
+
+    const pageNumber = useAppSelector<number>((state: RootState) => state.page.pageNumber);
+
+    const [dataProfile, setDataProfile] = useState<User>(profile);
+    const [videoLiked, setVideoLiked] = useState<ModelVideo[]>([]);
 
     useEffect(() => {
-        const getProfileUser = async () => {
-            let res = await GetProfileUser(profile);
-            setUserProfile(res);
-        };
+        if (myProfile) {
+            let getUserLikedVideo = async () => {
+                let res = await GetUserLikedVideo(dataUser.id, pageNumber, token);
+                setVideoLiked(res);
+            };
 
-        getProfileUser();
-    }, [profile]);
+            getUserLikedVideo();
+        }
+    }, [dataUser.id, pageNumber, myProfile, token]);
+
+    let handleFollowUser = async () => {
+        if (dataProfile.is_followed) {
+            let res = await UnFollowAnUser(dataProfile.id, pageNumber, token);
+            setDataProfile(res);
+        } else {
+            let res = await FollowAnUser(dataProfile.id, pageNumber, token);
+            setDataProfile(res);
+        }
+    };
 
     return (
         <Stack>
-            <HeaderProfile dataProfile={userProfile} />
-            <VideoPreview data={userProfile?.videos || []} />
+            <HeaderProfile dataProfile={dataProfile} myProfile={myProfile} handleFollowUser={handleFollowUser} />
+            <VideoPreview
+                data={profile?.videos || []}
+                videoLiked={videoLiked}
+                isFollow={dataProfile.is_followed}
+                follow={handleFollowUser}
+            />
         </Stack>
     );
 }

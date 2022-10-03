@@ -19,7 +19,7 @@ export interface VideoDetailProps {
     LikeVideo: () => void;
     UnlikeVideo: () => void;
     close: () => void;
-    commentsCount: (amount: number) => void;
+    commentsCount?: (amount: number) => void;
     isFollow: boolean;
     follow: () => void;
 }
@@ -49,7 +49,7 @@ export default function VideoDetail({
     LikeVideo,
     UnlikeVideo,
     isLiked,
-    commentsCount,
+    commentsCount = () => {},
     isFollow,
     follow,
 }: VideoDetailProps) {

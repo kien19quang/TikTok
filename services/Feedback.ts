@@ -5,7 +5,7 @@ const LikeAVideo = (id: number, pageNumber: number, token: string): Promise<Mode
     return new Promise(async (resolve, reject) => {
         try {
             let response = await axiosClient({
-                url: `https://tiktok.fullstack.edu.vn/api/videos/1/like`,
+                url: `https://tiktok.fullstack.edu.vn/api/videos/${pageNumber}/like`,
                 method: 'POST',
                 data: { id: id.toString() },
                 headers: {
